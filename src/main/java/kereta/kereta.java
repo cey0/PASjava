@@ -1,0 +1,612 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package kereta;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
+
+/**
+ *
+ * @author nadra
+ */
+public class kereta extends javax.swing.JFrame {
+
+    /**
+     * Creates new form kereta
+     */
+    //menginisialisasi variabel yang sering dipakai, untuk lebih gampang dan cepat
+     Connection c;
+    Statement st;
+    String sql;
+    ResultSet rs;
+    private DefaultTableModel tbl;
+    public kereta() {
+        initComponents();
+        tampildata();
+        tampilkereta();
+        tampiljurusan();
+       
+    }
+    
+//function untuk menampilkan data ke table
+ public void tampildata() {
+     //menambahkan column ke table sesuai database
+    tbl = new DefaultTableModel();
+    tbl.addColumn("id_tiket");
+    tbl.addColumn("nama");
+    tbl.addColumn("kode_kereta");
+    tbl.addColumn("nama_kereta");
+    tbl.addColumn("id_jurusan");
+    tbl.addColumn("jurusan");
+    tbl.addColumn("jenis");
+    tbl.addColumn("harga");
+    tbl.addColumn("jumlah");
+    tbl.addColumn("total");
+    table.setModel(tbl);
+    //koneksi
+    c = koneksi.getConnection();
+    try {
+        st = c.createStatement();
+        sql = "SELECT * FROM tiket";
+        rs = st.executeQuery(sql);
+        //mengambil data dari database
+        while (rs.next()) {
+            tbl.addRow(new Object[]{
+                rs.getString("id_tiket"),
+                rs.getString("nama"),
+                rs.getString("kode_kereta"),
+                rs.getString("nama_kereta"),
+                rs.getString("id_jurusan"),
+                rs.getString("jurusan"),
+                rs.getString("jenis"),
+                rs.getString("harga"),
+                rs.getString("jumlah"),
+                rs.getString("total")
+            });
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+}
+ //berfungsi untuk menampilkan data ke combo box kode kereta
+public void tampilkereta() {
+    Kkereta.removeAllItems(); // Clear existing items in the combo box
+    try {
+        c = koneksi.getConnection();
+        st = c.createStatement();
+        sql = "SELECT kode_kereta FROM kereta"; // Change this query to fetch data from your database table
+        rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            Kkereta.addItem(rs.getString("kode_kereta")); // Add each item to the combo box
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+}
+public void tampilNamaKereta() {
+    if (Kkereta.getSelectedItem() != null) {
+        String kodeKereta = Kkereta.getSelectedItem().toString();
+        try {
+            c = koneksi.getConnection();
+            PreparedStatement ps = c.prepareStatement("SELECT nama_kereta FROM kereta WHERE kode_kereta = ?");
+            ps.setString(1, kodeKereta);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Nkereta.setText(rs.getString("nama_kereta"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    } else{
+      Nkereta.setText("");
+    }
+}
+public void tampiljurusan() {
+    jurusan.removeAllItems(); // Clear existing items in the combo box
+    try {
+        c = koneksi.getConnection();
+        st = c.createStatement();
+        sql = "SELECT id_jurusan FROM jurusans"; // Change this query to fetch data from your database table
+        rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            jurusan.addItem(rs.getString("id_jurusan")); // Add each item to the combo box
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+}
+public void tampilNamajurusan() {
+    if (jurusan.getSelectedItem() != null) {
+        String kodeKereta = jurusan.getSelectedItem().toString();
+        try {
+            c = koneksi.getConnection();
+            PreparedStatement ps = c.prepareStatement("SELECT jurusan, harga FROM jurusans WHERE id_jurusan = ?");
+            ps.setString(1, kodeKereta);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Njurusan.setText(rs.getString("jurusan"));
+                harga.setText(rs.getString("harga"));
+                hargaUpdated = false;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    } else{
+      Njurusan.setText("");
+    }
+}
+
+
+
+
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        nama = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        Nkereta = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        Njurusan = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        harga = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jumlah = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        total = new javax.swing.JTextField();
+        Kkereta = new javax.swing.JComboBox<>();
+        jurusan = new javax.swing.JComboBox<>();
+        ekonomi = new javax.swing.JRadioButton();
+        eksekutif = new javax.swing.JRadioButton();
+        bisnis = new javax.swing.JRadioButton();
+        ekspres = new javax.swing.JRadioButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "id_tiket", "nama", "kode_kereta", "nama_kereta", "id_jurusan", "jurusan", "jenis", "harga", "jumlah", "total"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(table);
+
+        jButton1.setText("X");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("nama");
+
+        nama.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                namaActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Kode Kereta");
+
+        jLabel3.setText("nama Kereta");
+
+        Nkereta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NkeretaActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("jurusan");
+
+        Njurusan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NjurusanActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("jenis");
+
+        jLabel6.setText("harga");
+
+        harga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hargaActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("jumlah bayar");
+
+        jumlah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jumlahActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("total bayar");
+
+        total.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalActionPerformed(evt);
+            }
+        });
+
+        Kkereta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Kkereta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                KkeretaActionPerformed(evt);
+            }
+        });
+
+        jurusan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jurusan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jurusanActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(ekonomi);
+        ekonomi.setText("ekonomi");
+        ekonomi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ekonomiActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(eksekutif);
+        eksekutif.setText("eksekutif");
+        eksekutif.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eksekutifActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(bisnis);
+        bisnis.setText("bisnis");
+        bisnis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bisnisActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(ekspres);
+        ekspres.setText("ekspres");
+        ekspres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ekspresActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("beli");
+
+        jButton3.setText("hapus");
+
+        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 515, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 341, Short.MAX_VALUE)
+        );
+
+        jButton4.setText("hitung");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 862, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel8)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel5)))
+                                .addGap(53, 53, 53)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(harga)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton4))
+                                    .addComponent(Kkereta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jurusan, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(Njurusan, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
+                                    .addComponent(Nkereta)
+                                    .addComponent(total)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(ekonomi)
+                                            .addComponent(eksekutif, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addGap(32, 32, 32)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(ekspres)
+                                            .addComponent(bisnis)))
+                                    .addComponent(jumlah)
+                                    .addComponent(nama))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(Kkereta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(Nkereta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(Njurusan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jurusan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(ekonomi)
+                            .addComponent(bisnis))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(eksekutif)
+                            .addComponent(ekspres))
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(jButton3)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void namaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_namaActionPerformed
+
+    private void NkeretaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NkeretaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NkeretaActionPerformed
+
+    private void NjurusanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NjurusanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NjurusanActionPerformed
+
+    private void hargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hargaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_hargaActionPerformed
+
+    private void jumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumlahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jumlahActionPerformed
+
+    private void totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_totalActionPerformed
+
+    private void KkeretaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KkeretaActionPerformed
+        // TODO add your handling code here:
+        tampilNamaKereta();
+      
+    }//GEN-LAST:event_KkeretaActionPerformed
+
+    private void ekonomiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ekonomiActionPerformed
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_ekonomiActionPerformed
+
+    private void eksekutifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eksekutifActionPerformed
+        // TODO add your handling code here:
+       if (!hargaUpdated) { // Check if the price has not been updated
+        int hargaAwal = Integer.parseInt(harga.getText()); // Get the initial price
+
+        // Increase the price by 100,000
+        int hargaBaru = hargaAwal + 100000;
+
+        // Set the updated price in the text field
+        harga.setText(String.valueOf(hargaBaru));
+
+        hargaUpdated = true; // Set the flag to true to indicate that the price has been updated
+    }
+    }//GEN-LAST:event_eksekutifActionPerformed
+private boolean hargaUpdated = false;
+    private void bisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bisnisActionPerformed
+        // TODO add your handling code here:
+       if (!hargaUpdated) { // Check if the price has not been updated
+        int hargaAwal = Integer.parseInt(harga.getText()); // Get the initial price
+
+        // Increase the price by 100,000
+        int hargaBaru = hargaAwal + 100000;
+
+        // Set the updated price in the text field
+        harga.setText(String.valueOf(hargaBaru));
+
+        hargaUpdated = true; // Set the flag to true to indicate that the price has been updated
+    }
+    }//GEN-LAST:event_bisnisActionPerformed
+
+    private void jurusanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jurusanActionPerformed
+        // TODO add your handling code here:
+        tampilNamajurusan();
+    }//GEN-LAST:event_jurusanActionPerformed
+
+    private void ekspresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ekspresActionPerformed
+        // TODO add your handling code here:
+         if (!hargaUpdated) { // Check if the price has not been updated
+        int hargaAwal = Integer.parseInt(harga.getText()); // Get the initial price
+
+        // Increase the price by 200,000
+        int hargaBaru = hargaAwal + 200000;
+
+        // Set the updated price in the text field
+        harga.setText(String.valueOf(hargaBaru));
+
+        hargaUpdated = true; // Set the flag to true to indicate that the price has been updated
+    }
+    }//GEN-LAST:event_ekspresActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(kereta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(kereta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(kereta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(kereta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new kereta().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> Kkereta;
+    private javax.swing.JTextField Njurusan;
+    private javax.swing.JTextField Nkereta;
+    private javax.swing.JRadioButton bisnis;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton ekonomi;
+    private javax.swing.JRadioButton eksekutif;
+    private javax.swing.JRadioButton ekspres;
+    private javax.swing.JTextField harga;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jumlah;
+    private javax.swing.JComboBox<String> jurusan;
+    private javax.swing.JTextField nama;
+    private javax.swing.JTable table;
+    private javax.swing.JTextField total;
+    // End of variables declaration//GEN-END:variables
+}
