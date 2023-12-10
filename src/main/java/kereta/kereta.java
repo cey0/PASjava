@@ -67,7 +67,7 @@ public class kereta extends javax.swing.JFrame {
                 rs.getString("nama_kereta"),
                 rs.getString("id_jurusan"),
                 rs.getString("jurusan"),
-                rs.getString("jenis"),
+                rs.getString("jenis_tiket"),
                 rs.getString("harga"),
                 rs.getString("jumlah"),
                 rs.getString("total")
@@ -320,6 +320,11 @@ public void tampilNamajurusan() {
         });
 
         jButton2.setText("beli");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("hapus");
 
@@ -337,6 +342,11 @@ public void tampilNamajurusan() {
         );
 
         jButton4.setText("hitung");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -543,6 +553,47 @@ private boolean hargaUpdated = false;
         hargaUpdated = true; // Set the flag to true to indicate that the price has been updated
     }
     }//GEN-LAST:event_ekspresActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        int value =Integer.parseInt(harga.getText());
+        int kali = Integer.parseInt(jumlah.getText());
+        int hasil = value * kali;
+        total.setText(String.valueOf(hasil));
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+           if (ekonomi.isSelected()) {
+        pilihan = "ekonomu ";
+    } else if (radioButton2.isSelected()) {
+        pilihan = "Pilihan 2";
+    } else if (radioButton3.isSelected()) {
+        pilihan = "Pilihan 3";
+    } else if (radioButton4.isSelected()) {
+        pilihan = "Pilihan 4";
+    }
+          try {
+            c = koneksi.getConnection();
+            String sql = "INSERT INTO tiket (nama,kode_kereta,nama_kereta,id_jurusan,jurusan,jenis_riket,harga,jumlah,total ) VALUES (?,?,?,?,?,?,?,?,?)";
+            PreparedStatement st = c.prepareStatement(sql);
+            st.setString(1, nama.getText());
+            st.setInt(2,Integer.parseInt(Kkereta.getSelectedItem().toString()));
+            st.setString(3, Nkereta.getText());
+            st.setInt(4, Integer.parseInt(jurusan.getSelectedItem().toString()));
+            st.s
+            int rowsInserted = st.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("A new row has been inserted.");
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.setRowCount(0);
+                tampildata();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
